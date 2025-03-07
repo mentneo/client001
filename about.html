@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Cuddly Companions</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Additional 3D Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.min.js"></script>
+
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #f8b195;
+            --secondary-color: #f67280;
+            --accent-color: #c06c84;
+            --dark-color: #6c5b7b;
+            --light-color: #fef9f8;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --primary-gradient: linear-gradient(135deg, #6C63FF 0%, #FF6B6B 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            background: var(--light-color);
+            overflow-x: hidden;
+        }
+
+        /* Navigation Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .video-hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-gradient);
+        }
+
+        .video-container {
+            width: 80%;
+            max-width: 1000px;
+            aspect-ratio: 16/9;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .video-container:hover {
+            transform: perspective(1000px) rotateX(0deg);
+        }
+
+        .story-section {
+            position: relative;
+            padding: 100px 0;
+            overflow: hidden;
+        }
+
+        .floating-bears {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .floating-bear {
+            position: absolute;
+            opacity: 0.1;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .mission-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateZ(20px) scale(1.02);
+        }
+
+        .craftsmanship-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .craft-item {
+            position: relative;
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            background: white;
+            box-shadow: var(--shadow);
+            transition: transform 0.5s ease;
+        }
+
+        .craft-item:hover {
+            transform: translateY(-10px) rotateX(5deg);
+        }
+
+        .craft-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .craft-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .craft-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            transform: translateZ(30px);
+        }
+
+        .testimonial-3d {
+            position: relative;
+            padding: 60px;
+            background: var(--primary-gradient);
+            border-radius: 30px;
+            margin: 60px 0;
+            color: white;
+            transform-style: preserve-3d;
+        }
+
+        .testimonial-3d::before {
+            content: '"';
+            position: absolute;
+            top: -30px;
+            left: 30px;
+            font-size: 120px;
+            color: rgba(255,255,255,0.1);
+        }
+
+        #bear-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            .video-container {
+                width: 95%;
+            }
+
+            .craftsmanship-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 60px 0 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        .footer-about {
+            grid-column: span 2;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light-color);
+            text-decoration: none;
+        }
+
+        .footer-logo span {
+            color: var(--accent-color);
+        }
+
+        .social-links a {
+            color: var(--light-color);
+            margin-right: 10px;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-links h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--light-color);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul li a {
+            text-decoration: none;
+            color: var(--light-color);
+            transition: color 0.3s ease;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-newsletter p {
+            margin-bottom: 20px;
+        }
+
+        .newsletter-form {
+            display: flex;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+
+        .newsletter-form button {
+            padding: 10px;
+            border: none;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--secondary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px 0;
+            background: var(--dark-color);
+            color: var(--light-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .company-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin: 4rem 0;
+            padding: 2rem;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+
+        .founder-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            padding: 4rem 0;
+            align-items: center;
+        }
+
+        .founder-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .founder-image:hover {
+            transform: translateZ(20px);
+        }
+
+        .founder-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--accent-color), transparent);
+            opacity: 0.3;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+            max-height: 800px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .review-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .review-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .review-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .achievement-banner {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin: 4rem 0;
+            border-radius: 20px;
+        }
+
+        .achievement-list {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        /* Mobile Navigation */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background: var(--dark-color);
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                margin: 20px 0;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hamburger.active div:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active div:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">Cuddly<span>Companions</span></a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="./new-arrivals.html">new-arrivals</a></li>
+                <li><a href="./social.html">Social</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
+
+    <canvas id="bear-canvas"></canvas>
+
+    <section class="video-hero">
+        <div class="video-container">
+            <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/STAEe52jgJU?autoplay=1&mute=1&loop=1&playlist=STAEe52jgJU"
+                title="Our Story" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                onerror="this.style.display='none'"
+            ></iframe>
+        </div>
+    </section>
+
+    <section class="story-section">
+        <div class="floating-bears" id="scene">
+            <div class="floating-bear" data-depth="0.2">🧸</div>
+            <div class="floating-bear" data-depth="0.4">🧸</div>
+            <div class="floating-bear" data-depth="0.6">🧸</div>
+            <div class="floating-bear" data-depth="0.8">🧸</div>
+        </div>
+        
+        <div class="container">
+            <h1 class="main-title">More Than Just a Teddy Bear – A Hug in Every Stitch!</h1>
+            
+            <div class="mission-card">
+                <h2>Our Story</h2>
+                <p>It all began in a small workshop in 2010, where our founder Sarah Johnson crafted her first teddy bear 
+                   for her daughter. That single act of love sparked a journey that would touch thousands of hearts...</p>
+            </div>
+
+            <div class="craftsmanship-gallery">
+                <div class="craft-item">
+                    <img src="images/handmade.jpg" alt="Handmade Process" onerror="this.src='images/placeholder.jpg'">
+                    <div class="craft-info">
+                        <h3>Premium Materials</h3>
+                        <p>We use only the finest, ethically-sourced materials for our bears</p>
+                    </div>
+                </div>
+                <div class="craft-item">
+                    <img src="images/quality.jpg" alt="Quality Control" onerror="this.src='images/placeholder.jpg'">
+                    <div class="craft-info">
+                        <h3>Quality Testing</h3>
+                        <p>Each bear undergoes rigorous safety and quality checks</p>
+                    </div>
+                </div>
+                <div class="craft-item">
+                    <img src="images/stitching.jpg" alt="Stitching Process" onerror="this.src='images/placeholder.jpg'">
+                    <div class="craft-info">
+                        <h3>Expert Stitching</h3>
+                        <p>Precision stitching by skilled artisans ensures durability</p>
+                    </div>
+                </div>
+                <div class="craft-item">
+                    <img src="images/design.jpg" alt="Design Process" onerror="this.src='images/placeholder.jpg'">
+                    <div class="craft-info">
+                        <h3>Unique Designs</h3>
+                        <p>Each design is carefully crafted to bring joy and comfort</p>
+                    </div>
+                </div>
+                <div class="craft-item">
+                    <img src="images/packaging.jpg" alt="Packaging" onerror="this.src='images/placeholder.jpg'">
+                    <div class="craft-info">
+                        <h3>Eco-Friendly Packaging</h3>
+                        <p>Sustainable packaging for a better environment</p>
+                    </div>
+                </div>
+                <div class="craft-item">
+                    <img src="images/customization.jpg" alt="Customization" onerror="this.src='images/placeholder.jpg'">
+                    <div class="craft-info">
+                        <h3>Custom Options</h3>
+                        <p>Personalize your teddy bear with custom features</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-3d"></div>
+                <p>"The teddy bear I received from Cuddly Companions became my daughter's best friend. 
+                   The quality and craftsmanship are beyond amazing!"</p>
+                <cite>- Emma Thompson, Happy Parent</cite>
+            </div>
+
+            <div class="cta-section">
+                <h2>Ready to Find Your Perfect Teddy Bear?</h2>
+                <a href="#" class="btn">Browse Our Collection</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="company-overview">
+        <div class="container">
+            <div class="company-stats">
+                <div class="stat-card">
+                    <h3>2M+</h3>
+                    <p>Teddy Bears Sold</p>
+                </div>
+                <div class="stat-card">
+                    <h3>300+</h3>
+                    <p>Retail Partners</p>
+                </div>
+                <div class="stat-card">
+                    <h3>50+</h3>
+                    <p>Countries Served</p>
+                </div>
+                <div class="stat-card"></div>
+                    <h3>$100M+</h3>
+                    <p>Annual Revenue</p>
+                </div>
+            </div>
+
+            <div class="founder-section">
+                <div class="founder-image">
+                    <img src="images/founder-image.jpg" alt="Sarah Johnson - Founder" onerror="this.src='images/placeholder.jpg'">
+                </div>
+                <div class="founder-story">
+                    <h2>Meet Our Founder</h2>
+                    <p>Sarah Johnson's journey began in 2010 when she created a special teddy bear for her daughter who was battling anxiety. The therapeutic effect of that first bear inspired her to help other children find comfort through cuddly companions.</p>
+                    <p>With a background in textile engineering and child psychology, Sarah developed a unique approach to teddy bear design that combines durability with emotional connection.</p>
+                    <div class="founder-achievements">
+                        <div class="achievement">
+                            <i class="fas fa-award"></i>
+                            <p>Entrepreneur of the Year 2022</p>
+                        </div>
+                        <div class="achievement">
+                            <i class="fas fa-certificate"></i>
+                            <p>Best Toy Manufacturing Innovation 2023</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="achievement-banner"></div>
+                <h2>Industry Recognition</h2>
+                <div class="achievement-list">
+                    <div class="achievement-item">
+                        <i class="fas fa-star"></i>
+                        <p>Best Toy Manufacturer 2023</p>
+                    </div>
+                    <div class="achievement-item">
+                        <i class="fas fa-globe"></i>
+                        <p>Global Quality Excellence</p>
+                    </div>
+                    <div class="achievement-item">
+                        <i class="fas fa-heart"></i>
+                        <p>Children's Choice Award</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reviews-section">
+                <h2 class="section-title">What Our <span>Customers Say</span></h2>
+                <div class="reviews-grid">
+                    <div class="review-card" data-review-id="1">
+                        <div class="rating">★★★★★</div>
+                        <p>"Absolutely perfect! The quality is outstanding..."</p>
+                        <div class="customer-info">
+                            <div class="customer-image">
+                                <img src="images/customer1.jpg" alt="Emily Parker" onerror="this.src='images/placeholder.jpg'">
+                            </div>
+                            <div>
+                                <h4>Emily Parker</h4>
+                                <p>Verified Buyer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add 14 more similar review cards with different content -->
+                </div>
+            </div>
+
+            <div class="review-modal"></div>
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <div class="full-review-content"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3 class="footer-logo">Cuddly<span>Companions</span></h3>
+                <p>Crafting premium teddy bears that bring joy and comfort to people of all ages.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="./new-arrivals.html">Shop</a></li>
+                    <li><a href="./contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Help</h3>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-newsletter">
+                <h3>Newsletter</h3>
+                <p>Subscribe for updates and special offers</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email">
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Cuddly Companions. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Parallax Effect
+        const scene = document.getElementById('scene');
+        const parallaxInstance = new Parallax(scene);
+
+        // Initialize 3D Background
+        const canvas = document.getElementById('bear-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const scene3D = new THREE.Scene();
+
+        // Add ambient light
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene3D.add(ambientLight);
+
+        // Create floating particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 5;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        // Material for particles
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.005,
+            color: 0x6C63FF
+        });
+
+        // Create points
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene3D.add(particlesMesh);
+
+        camera.position.z = 3;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            renderer.render(scene3D, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize animation
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        animate();
+
+        // Scroll animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.from('.mission-card', {
+            scrollTrigger: {
+                trigger: '.mission-card',
+                start: 'top 80%',
+            },
+            y: 100,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+        gsap.from('.craft-item', {
+            scrollTrigger: {
+                trigger: '.craftsmanship-gallery',
+                start: 'top 80%',
+            },
+            y: 50,
+            opacity: 0,
+            stagger: {
+                amount: 1,
+                grid: [3, 2]
+            },
+            duration: 0.8,
+            ease: 'power3.out'
+        });
+
+        // Add new animations
+        gsap.from('.founder-section', {
+            scrollTrigger: {
+                trigger: '.founder-section',
+                start: 'top 70%'
+            },
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+        gsap.from('.review-card', {
+            scrollTrigger: {
+                trigger: '.reviews-grid',
+                start: 'top 80%'
+            },
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 0.8,
+            ease: 'power3.out'
+        });
+
+        // Floating animation for achievement items
+        gsap.to('.achievement-item', {
+            y: -10,
+            duration: 1.5,
+            repeat: -1,
+            yoyo: true,
+            stagger: 0.2,
+            ease: 'power1.inOut'
+        });
+
+        // Mobile Navigation
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Review Cards Click Handler
+        const reviewCards = document.querySelectorAll('.review-card');
+        const reviewModal = document.querySelector('.review-modal');
+        const modalContent = document.querySelector('.full-review-content');
+        const closeModal = document.querySelector('.close-modal');
+
+        const reviews = [
+            {
+                id: 1,
+                rating: 5,
+                text: "The quality and attention to detail is exceptional. My daughter hasn't let go of her bear since she got it!",
+                name: "Emily Parker",
+                title: "Verified Buyer",
+                image: "images/customer1.jpg"
+            },
+            {
+                id: 2,
+                rating: 5,
+                text: "Best investment ever! The teddy bear is so soft and well-made.",
+                name: "John Smith",
+                title: "Verified Buyer",
+                image: "images/customer2.jpg"
+            },
+            // Add more reviews here
+        ];
+
+        reviewCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const reviewId = card.getAttribute('data-review-id');
+                const review = reviews.find(r => r.id === parseInt(reviewId));
+                
+                modalContent.innerHTML = `
+                    <div class="rating">${'★'.repeat(review.rating)}</div>
+                    <p>${review.text}</p>
+                    <div class="customer-info">
+                        <div class="customer-image">
+                            <img src="${review.image}" alt="${review.name}" onerror="this.src='images/placeholder.jpg'">
+                        </div>
+                        <div>
+                            <h4>${review.name}</h4>
+                            <p>${review.title}</p>
+                        </div>
+                    </div>
+                `;
+                
+                reviewModal.classList.add('active');
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            reviewModal.classList.remove('active');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === reviewModal) {
+                reviewModal.classList.remove('active');
+            }
+        });
+
+        // Error handling for images
+        function handleImageError(img) {
+            img.onerror = null;
+            img.src = 'images/placeholder.jpg';
+        }
+
+        // Initialize Firebase with error handling
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.firestore();
+            const storage = firebase.storage();
+            const auth = firebase.auth();
+        } catch (error) {
+            console.log('Firebase initialization error:', error);
+        }
+
+        // Review carousel functionality
+        function initReviewCarousel() {
+            let currentIndex = 0;
+            const reviewsPerPage = window.innerWidth > 768 ? 3 : 1;
+            const reviewCards = document.querySelectorAll('.review-card');
+            
+            function showReviews() {
+                reviewCards.forEach((card, index) => {
+                    if (index >= currentIndex && index < currentIndex + reviewsPerPage) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            setInterval(() => {
+                currentIndex = (currentIndex + reviewsPerPage) % reviews.length;
+                showReviews();
+            }, 5000);
+
+            showReviews();
+        }
+
+        // Initialize everything with error handling
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                init3DScene();
+                initReviewCarousel();
+                // ...existing initialization code...
+            } catch (error) {
+                console.log('Initialization error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

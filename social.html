@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social & Works | Cuddly Companions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f8b195;
+            --secondary-color: #f67280;
+            --accent-color: #c06c84;
+            --dark-color: #6c5b7b;
+            --light-color: #fef9f8;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+  /* Header & Navigation */
+  header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 10px 0;
+            background: white;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        .nav-links a.active {
+            color: var(--accent-color);
+        }
+        
+        .new-arrival-indicator {
+            position: relative;
+        }
+        
+        .new-arrival-indicator::after {
+            content: 'New';
+            position: absolute;
+            top: -10px;
+            right: -20px;
+            background: var(--secondary-color);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+        
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background: var(--dark-color);
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .work-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .work-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .work-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .work-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .work-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+        }
+
+        .collaborators {
+            background: var(--light-color);
+            padding: 4rem 2rem;
+        }
+
+        .collaborator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .collaborator-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .collaborator-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .collaborator-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+        }
+
+        .collaborator-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            color: var(--dark-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--accent-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                        url('images/teddy-hero.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-top: 80px;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">Cuddly<span>Companions</span></a>
+                <ul class="nav-links">
+                    <li><a href="./home.html" class="active">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="new-arrivals.html" class="new-arrival-indicator">New Arrivals</a></li>
+                    <li><a href="./social.html">Social</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                    <li><a href="admin.html" id="admin-link" style="display: none;">Admin</a></li>
+                </ul>
+                <div class="hamburger">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Add Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Our Creative Journey</h1>
+            <p>Discover our story through craftsmanship and community</p>
+            <div class="scroll-indicator">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Feature Grid -->
+    <section class="features">
+        <div class="feature-grid">
+            <div class="feature-card">
+                <i class="fas fa-heart"></i>
+                <h3>Handmade with Love</h3>
+                <p>Each teddy bear is crafted with attention to detail</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-certificate"></i>
+                <h3>Quality Materials</h3>
+                <p>Premium fabrics and safe materials for lasting joy</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-gift"></i>
+                <h3>Custom Orders</h3>
+                <p>Personalized teddy bears for special occasions</p>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section class="work-showcase">
+            <div class="section-title">
+                <h2>Featured Collections</h2>
+                <p>Our most beloved teddy bear designs</p>
+            </div>
+            <div class="work-gallery">
+                <div class="work-item">
+                    <img src="images/classic-teddy.jpg" alt="Classic Teddy">
+                    <div class="work-overlay">
+                        <h3>Classic Collection</h3>
+                        <p>Timeless teddy bear designs</p>
+                    </div>
+                </div>
+                <div class="work-item">
+                    <img src="images/premium-teddy.jpg" alt="Premium Teddy">
+                    <div class="work-overlay">
+                        <h3>Premium Series</h3>
+                        <p>Luxury teddy bears</p>
+                    </div>
+                </div>
+                <div class="work-item">
+                    <img src="images/custom-teddy.jpg" alt="Custom Teddy">
+                    <div class="work-overlay">
+                        <h3>Custom Designs</h3>
+                        <p>Personalized teddy bears</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="collaborators">
+            <div class="section-title">
+                <h2>Our Collaborators</h2>
+                <p>Meet the amazing partners who help us deliver excellence</p>
+            </div>
+            <div class="collaborator-grid">
+                <div class="collaborator-card">
+                    <div class="collaborator-image">
+                        <img src="images/collab1.jpg" alt="Collaborator name">
+                    </div>
+                    <h3>Dr. Sarah Johnson</h3>
+                    <p>Veterinary Specialist</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <!-- Add more collaborator cards -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Add scroll animation script -->
+    <script>
+        // Add smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add animation for work items on scroll
+        const workItems = document.querySelectorAll('.work-item');
+        
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        workItems.forEach(item => {
+            item.style.opacity = 0;
+            item.style.transform = 'translateY(20px)';
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

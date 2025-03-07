@@ -1,0 +1,22 @@
+// Create a 300x300px placeholder image with this base64 data
+
+<script>
+const canvas = document.createElement('canvas');
+canvas.width = 300;
+canvas.height = 300;
+const ctx = canvas.getContext('2d');
+
+// Draw placeholder
+ctx.fillStyle = '#f0f0f0';
+ctx.fillRect(0, 0, 300, 300);
+ctx.fillStyle = '#cccccc';
+ctx.font = '16px Arial';
+ctx.textAlign = 'center';
+ctx.fillText('Image Not Found', 150, 150);
+
+// Save as placeholder.jpg
+const link = document.createElement('a');
+link.download = 'placeholder.jpg';
+link.href = canvas.toDataURL('image/jpeg');
+link.click();
+</script>
