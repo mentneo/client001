@@ -1,0 +1,147 @@
+/* Offline mode indication */
+.offline-mode::after {
+    content: "You're offline. Some features may be limited.";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #ff9800;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    font-size: 0.9rem;
+    z-index: 2000;
+}
+
+/* Image placeholders */
+.image-placeholder {
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.image-placeholder::before {
+    content: "\f03e";
+    font-family: "Font Awesome 5 Free";
+    font-size: 2rem;
+    margin-right: 10px;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+    
+    /* Disable pull-to-refresh on iOS */
+    body {
+        overscroll-behavior-y: none;
+    }
+    
+    /* Better tap target sizes */
+    button, 
+    a,
+    input[type="submit"],
+    .nav-links a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Prevent scroll when menu is open */
+    body.no-scroll {
+        overflow: hidden;
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
+    }
+    
+    /* Fast tap on iOS */
+    a, button {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Error states for forms */
+.form-group.error input,
+.form-group.error textarea {
+    border-color: #ff4444;
+}
+
+.form-group.error::after {
+    content: "This field is required";
+    color: #ff4444;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Mobile-friendly tables */
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    tr {
+        margin-bottom: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    td {
+        position: relative;
+        padding-left: 50% !important;
+        text-align: right !important;
+    }
+    
+    td:before {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 45%;
+        white-space: nowrap;
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+    }
+}
+
+/* Loading indicators */
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    border: 4px solid rgba(0,0,0,0.1);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 0.8s infinite linear;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Focus states for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}

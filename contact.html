@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="js/firebase-config.js" defer></script>
+    <meta name="theme-color" content="#f8b195">
     
     <style>
         /* Import existing root variables and basic styles */
@@ -160,12 +163,252 @@
                 grid-column: span 1;
             }
         }
+
+        /* Mobile navigation fixes */
+        .primary-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-color);
+            background: rgba(192,108,132,0.1);
+        }
+        
+        /* Contact page mobile fixes */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                cursor: pointer;
+                z-index: 1001;
+            }
+            
+            .hamburger div {
+                width: 25px;
+                height: 3px;
+                background: var(--dark-color);
+                margin: 5px;
+                transition: all 0.3s ease;
+            }
+            
+            .hamburger.toggle div:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            
+            .hamburger.toggle div:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.toggle div:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .contact-hero {
+                margin-top: 80px;
+                height: 50vh;
+                padding: 0 1rem;
+            }
+            
+            .contact-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-methods {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem;
+            }
+            
+            .contact-form-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            /* Add touch-friendly sizes */
+            .nav-links a, .btn, .social-link {
+                padding: 0.8rem;
+                min-height: 44px;
+                min-width: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            /* Mobile overlay for menu */
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .map-section {
+                height: 300px;
+            }
+        }
+        
+        /* Small Phone Optimization */
+        @media (max-width: 480px) {
+            .contact-hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .contact-card {
+                padding: 1.5rem;
+            }
+            
+            .contact-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                padding: 0.8rem;
+            }
+            
+            .social-links {
+                gap: 1rem;
+            }
+            
+            .social-link {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        
+        /* Fix for buttons */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: var(--dark-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
-    <!-- Include the same header navigation from other pages -->
-    <header>
-        <!-- ...existing navigation code... -->
+    <!-- Add menu overlay for mobile -->
+    <div class="menu-overlay"></div>
+    
+    <!-- Updated navigation -->
+    <header class="primary-header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="home.html" class="logo">
+                    Suresh<span>TeddyBears</span>
+                </a>
+                <div class="nav-wrapper">
+                    <ul class="nav-links">
+                        <li><a href="home.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="collection.html">Collection</a></li>
+                        <li><a href="social.html">Social</a></li>
+                        <li><a href="contact.html" class="active">Contact</a></li>
+                    </ul>
+                    <div class="hamburger">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </nav>
+        </div>
     </header>
 
     <section class="contact-hero">
@@ -253,27 +496,106 @@
     </footer>
 
     <script>
-        // Initialize Mapbox
-        mapboxgl.accessToken = 'your_mapbox_token';
-        const map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/light-v10',
-            center: [78.9629, 20.5937], // India coordinates
-            zoom: 5
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const menuOverlay = document.querySelector('.menu-overlay');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('toggle');
+            menuOverlay.classList.toggle('active');
+            document.body.classList.toggle('no-scroll');
         });
-
-        // Add marker for store location
-        new mapboxgl.Marker()
-            .setLngLat([78.9629, 20.5937])
-            .addTo(map);
-
-        // Form submission handling
+        
+        // Close menu when clicking overlay
+        menuOverlay.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            hamburger.classList.remove('toggle');
+            menuOverlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        });
+        
+        // Fix for mapbox errors
+        try {
+            mapboxgl.accessToken = 'pk.eyJ1IjoiZGVtby11c2VyIiwiYSI6ImNrb3E3dDN1YjAwNDEycG55b3N5N2MyZnYifQ.lfEYpjRJuNRYEQmNxC0JOA';
+            
+            if (mapboxgl.supported()) {
+                const map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/light-v10',
+                    center: [78.9629, 20.5937],
+                    zoom: 5
+                });
+                
+                new mapboxgl.Marker()
+                    .setLngLat([78.9629, 20.5937])
+                    .addTo(map);
+            } else {
+                document.getElementById('map').innerHTML = 
+                    '<div style="text-align:center;padding:50px;background:#f8f8f8">Map view not supported in your browser</div>';
+            }
+        } catch (error) {
+            console.error("Error initializing map:", error);
+            document.getElementById('map').innerHTML = 
+                '<div style="text-align:center;padding:50px;background:#f8f8f8">Unable to load map</div>';
+        }
+        
+        // Fix form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Add form submission logic here
-            alert('Message sent successfully!');
-            this.reset();
+            
+            try {
+                // Get form values
+                const formData = {
+                    name: this.querySelector('input[name="name"]') ? 
+                        this.querySelector('input[name="name"]').value : 
+                        this.querySelector('input[type="text"]').value,
+                    email: this.querySelector('input[type="email"]').value,
+                    phone: this.querySelector('input[type="tel"]').value,
+                    subject: this.querySelector('input[type="text"]:nth-of-type(2)') ? 
+                        this.querySelector('input[type="text"]:nth-of-type(2)').value : 
+                        'Contact Form Inquiry',
+                    message: this.querySelector('textarea').value
+                };
+                
+                // Format WhatsApp message safely
+                const whatsappMessage = `*New Contact Form*\n\n*Name:* ${formData.name}\n*Email:* ${formData.email}\n*Phone:* ${formData.phone}\n*Message:* ${formData.message}`;
+                const encodedMessage = encodeURIComponent(whatsappMessage);
+                
+                // Open WhatsApp
+                window.open(`https://wa.me/918214647600?text=${encodedMessage}`, '_blank');
+                this.reset();
+            } catch (error) {
+                console.error("Form submission error:", error);
+                alert("There was an error submitting the form. Please try again.");
+            }
         });
+        
+        // Add input validation
+        const formInputs = document.querySelectorAll('form input, form textarea');
+        
+        formInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '' && this.required) {
+                    this.classList.add('invalid');
+                    this.parentNode.classList.add('error');
+                } else {
+                    this.classList.remove('invalid');
+                    this.parentNode.classList.remove('error');
+                }
+            });
+        });
+        
+        // Fix viewport height issue on mobile
+        function setVhProperty() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        
+        window.addEventListener('resize', setVhProperty);
+        window.addEventListener('orientationchange', setVhProperty);
+        setVhProperty();
     </script>
 </body>
 </html>

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social & Works | Cuddly Companions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="js/firebase-config.js" defer></script>
+    <script src="js/iframe-handler.js" defer></script>
     <style>
         :root {
             --primary-color: #f8b195;
@@ -14,8 +17,9 @@
             --light-color: #fef9f8;
             --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-  /* Header & Navigation */
-  header {
+        
+        /* Header & Navigation */
+        header {
             position: fixed;
             top: 0;
             left: 0;
@@ -99,6 +103,8 @@
             margin: 5px;
             transition: all 0.3s ease;
         }
+        
+        /* Work Gallery */
         .work-gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -114,6 +120,7 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: transform 0.3s ease;
+            background-color: #f0f0f0;
         }
 
         .work-item:hover {
@@ -126,6 +133,18 @@
             object-fit: cover;
         }
 
+        .work-item::before {
+            content: "\f03e";
+            font-family: "Font Awesome 5 Free";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: #ccc;
+            z-index: -1;
+        }
+
         .work-overlay {
             position: absolute;
             bottom: 0;
@@ -136,6 +155,7 @@
             color: white;
         }
 
+        /* Collaborator Section */
         .collaborators {
             background: var(--light-color);
             padding: 4rem 2rem;
@@ -168,12 +188,26 @@
             border-radius: 50%;
             margin: 0 auto 1rem;
             overflow: hidden;
+            background-color: #f0f0f0;
+            position: relative;
         }
 
         .collaborator-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .collaborator-image::before {
+            content: "\f03e";
+            font-family: "Font Awesome 5 Free";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: #ccc;
+            z-index: -1;
         }
 
         .social-links {
@@ -200,10 +234,11 @@
             margin: 0 auto;
         }
 
+        /* Hero Section */
         .hero {
             height: 80vh;
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-                        url('images/teddy-hero.jpg');
+                        var(--accent-color);
             background-size: cover;
             background-position: center;
             display: flex;
@@ -220,6 +255,7 @@
             animation: fadeInUp 1s ease;
         }
 
+        /* Features Section */
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -258,19 +294,225 @@
                 transform: translateY(0);
             }
         }
+
+        /* Mobile Navigation Fixes */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+                transition: right 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Fix for hero content on small screens */
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Fix scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            color: white;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* Placeholder for missing images */
+        .placeholder-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 300px;
+            background-color: #f0f0f0;
+            color: #999;
+            font-size: 1.2rem;
+        }
+
+        /* Enhanced Mobile Styles */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .hamburger.toggle div:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            
+            .hamburger.toggle div:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.toggle div:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+            
+            .work-gallery {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2rem 1rem;
+            }
+            
+            .collaborator-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            /* Add touch-friendly sizes */
+            .nav-links a, 
+            .social-link,
+            .scroll-indicator i {
+                padding: 0.8rem;
+                min-height: 44px;
+                min-width: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            /* Mobile overlay for menu */
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+        
+        /* Small Phone Optimization */
+        @media (max-width: 480px) {
+            .hero {
+                height: 70vh;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            
+            .feature-card {
+                padding: 1.5rem;
+            }
+            
+            .work-item {
+                height: 250px;
+            }
+            
+            .work-item img {
+                height: 250px;
+            }
+            
+            .contact-methods {
+                padding: 2rem 1rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header id="header">
         <div class="container">
             <nav class="navbar">
-                <a href="#" class="logo">Cuddly<span>Companions</span></a>
+                <a href="home.html" class="logo">Suresh<span>TeddyBears</span></a>
                 <ul class="nav-links">
-                    <li><a href="./home.html" class="active">Home</a></li>
+                    <li><a href="home.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="new-arrivals.html" class="new-arrival-indicator">New Arrivals</a></li>
-                    <li><a href="./social.html">Social</a></li>
-                    <li><a href="./contact.html">Contact</a></li>
+                    <li><a href="social.html" class="active">Social</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                     <li><a href="admin.html" id="admin-link" style="display: none;">Admin</a></li>
                 </ul>
                 <div class="hamburger">
@@ -282,8 +524,11 @@
         </div>
     </header>
 
-    <!-- Add Hero Section -->
-    <section class="hero">
+    <!-- Add menu overlay for mobile -->
+    <div class="menu-overlay"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
         <div class="hero-content">
             <h1>Our Creative Journey</h1>
             <p>Discover our story through craftsmanship and community</p>
@@ -293,7 +538,7 @@
         </div>
     </section>
 
-    <!-- Add Feature Grid -->
+    <!-- Features Section -->
     <section class="features">
         <div class="feature-grid">
             <div class="feature-card">
@@ -353,7 +598,7 @@
             <div class="collaborator-grid">
                 <div class="collaborator-card">
                     <div class="collaborator-image">
-                        <img src="images/collab1.jpg" alt="Collaborator name">
+                        <img src="images/collab1.jpg" alt="Dr. Sarah Johnson">
                     </div>
                     <h3>Dr. Sarah Johnson</h3>
                     <p>Veterinary Specialist</p>
@@ -362,44 +607,160 @@
                         <a href="#"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
-                <!-- Add more collaborator cards -->
+                <!-- Additional collaborator cards can be added here -->
             </div>
         </section>
     </main>
 
-    <!-- Add scroll animation script -->
     <script>
-        // Add smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+    // Single set of variable declarations
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    const menuOverlay = document.querySelector('.menu-overlay');
+    const workItems = document.querySelectorAll('.work-item');
+    
+    // Mobile menu toggle
+    hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('toggle');
+        menuOverlay.classList.toggle('active');
+        document.body.classList.toggle('no-scroll');
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+            navLinks.classList.remove('active');
+            hamburger.classList.remove('toggle');
+            menuOverlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        }
+    });
+    
+    // Close menu when clicking overlay
+    menuOverlay.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        hamburger.classList.remove('toggle');
+        menuOverlay.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+    });
+    
+    // Scroll down functionality
+    document.querySelector('.scroll-indicator').addEventListener('click', () => {
+        document.querySelector('.features').scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Add smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
             });
         });
+    });
 
-        // Add animation for work items on scroll
-        const workItems = document.querySelectorAll('.work-item');
-        
-        const observerOptions = {
-            threshold: 0.2
+    // Add animation for work items on scroll
+    const observerOptions = {
+        threshold: 0.2
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    workItems.forEach(item => {
+        item.style.opacity = 0;
+        item.style.transform = 'translateY(20px)';
+        observer.observe(item);
+    });
+
+    // Handle image loading errors and touch interactions
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create placeholder for hero background if it fails
+        const hero = document.querySelector('.hero');
+        const img = new Image();
+        img.onload = function() {
+            hero.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/teddy-hero.jpg')`;
         };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        workItems.forEach(item => {
-            item.style.opacity = 0;
-            item.style.transform = 'translateY(20px)';
-            observer.observe(item);
+        img.onerror = function() {
+            console.log('Hero background image failed to load');
+        };
+        img.src = 'images/teddy-hero.jpg';
+        
+        // Fix all images on the page
+        document.querySelectorAll('img').forEach(img => {
+            img.onerror = function() {
+                // Replace with placeholder
+                const placeholder = document.createElement('div');
+                placeholder.className = 'placeholder-image';
+                placeholder.innerHTML = '<i class="fas fa-image"></i> Image not found';
+                
+                // Replace the img with placeholder
+                this.parentNode.replaceChild(placeholder, this);
+            };
         });
-    </script>
+        
+        // Set viewport height property for mobile
+        document.body.style.cssText = `--window-height: ${window.innerHeight}px`;
+        
+        // Add touch swipe detection for gallery
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        workItems.forEach(item => {
+            item.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+            
+            item.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe(item);
+            }, {passive: true});
+        });
+    });
+    
+    // Swipe handling functions
+    function handleSwipe(element) {
+        if (touchStartX - touchEndX > 50) {
+            // Swipe left - next
+            showNextItem(element);
+        } else if (touchEndX - touchStartX > 50) {
+            // Swipe right - previous
+            showPrevItem(element);
+        }
+    }
+    
+    function showNextItem(element) {
+        const next = element.nextElementSibling;
+        if (next && next.classList.contains('work-item')) {
+            element.style.opacity = 0;
+            setTimeout(() => {
+                next.scrollIntoView({behavior: 'smooth', block: 'center'});
+                next.style.opacity = 1;
+            }, 300);
+        }
+    }
+    
+    function showPrevItem(element) {
+        const prev = element.previousElementSibling;
+        if (prev && prev.classList.contains('work-item')) {
+            element.style.opacity = 0;
+            setTimeout(() => {
+                prev.scrollIntoView({behavior: 'smooth', block: 'center'});
+                prev.style.opacity = 1;
+            }, 300);
+        }
+    }
+    
+    // Define touchStartX and touchEndX at the script level
+    let touchStartX = 0;
+    let touchEndX = 0;
+</script>
 </body>
 </html>
